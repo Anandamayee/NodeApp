@@ -72,7 +72,7 @@ app.get("/weather", (req, res) => {
 
 
 
-app.get('/*', (re, res) => {
+app.get('*', (re, res) => {
     console.log("error");
     res.render("error", {
         message: "Oops!!! No data found"
