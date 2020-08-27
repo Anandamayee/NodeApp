@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Testing</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+
+<body>
+    {{>header}}
+
+{{address}}
+    <table>
+        <tr>
+            <th>Place Name</th>
+            <th>Lattitude</th>
+            <th>Longitude</th>
+        </tr>
+        <tr>
+            <td>{{place_name}}</td>
+            <td>{{lattitude}}</td>
+            <td>{{longitude}}</td>
+        </tr>
+    </table>
+
+    {{>footer}}
+</body>
+
+</html>
