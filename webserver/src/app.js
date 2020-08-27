@@ -7,12 +7,12 @@ const weatherStack = require('./utiles/weatherStack');
 const { response } = require('express');
 
 //define paths for express
-const uiPath = path.join(__dirname, '../UI');
+const publicPath = path.join(__dirname, '../public');
 const partialPath = path.join(__dirname, '../templates/partials');
 const viewsPath = path.join(__dirname, '../templates/views');
 
 //setup static directory 
-app.use(express.static(uiPath));
+app.use(express.static(publicPath));
 
 //handlebars engine and views location 
 app.set('view engine', 'hbs');
@@ -44,6 +44,7 @@ app.get("/product", (req, res) => {
 })
 
 app.get("/weather", (req, res) => {
+    console.log("weather");
     if (!req.query.address) {
         return res.send("Please provide address")
     }
@@ -51,10 +52,19 @@ app.get("/weather", (req, res) => {
         if (error) {
             return res.send({ error: error });
         }
-        return res.render('weather', {
-            "place_name": response.place_name,
-            "lattitude": response.center[0],
-            "longitude": response.center[1]
+        weatherStack(response.center,(err,data={})=>{
+            if(err){
+                return res.send({error:err});
+            }
+            return res.render("weather",{
+                place_name: response.place_name,
+                lattitude: response.center[0],
+                longitude: response.center[1],
+                weather_descriptions:data.weather_descriptions,
+                temperature:data.temperature,
+                wind_speed:data.wind_speed,
+                humidity:data.humidity
+            });
         })
     })
 
@@ -62,7 +72,7 @@ app.get("/weather", (req, res) => {
 
 
 
-app.get('*', (re, res) => {
+app.get('/*', (re, res) => {
     console.log("error");
     res.render("error", {
         message: "Oops!!! No data found"
@@ -72,3 +82,7 @@ app.get('*', (re, res) => {
 app.listen(3000, () => {
     console.log("server started");
 })
+
+
+
+
