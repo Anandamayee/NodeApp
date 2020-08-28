@@ -1,9 +1,17 @@
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
+// const mongodb = require('mongodb');
+// const MongoClient = mongodb.MongoClient;
+// const ObjectID=mongodb.ObjectID;
+
+const {MongoClient,ObjectId}=require('mongodb');
 
 
 const connectionUL = 'mongodb://127.0.01:27017'
 const database = 'task-manger';
+
+const id=new ObjectId();
+console.log(id.id.length);
+console.log(id.toHexString().length);
+
 
 
 MongoClient.connect(connectionUL, { useNewUrlParser: true }, (error, client) => {
@@ -12,17 +20,15 @@ MongoClient.connect(connectionUL, { useNewUrlParser: true }, (error, client) => 
         return console.error("Unable".error);
 
     }
-    console.log("connected to db");
-    const db = client.db(database);
+    // const db = client.db(database);
     // db.collection('users').insertOne({
-    //     name: "Andy",
-    //     age: "26"
+    //     name: "Arya",
+    //     age: "26",
+    //     _id:id
     // }, (error, result) => {
     //     if (error)
     //         return console.error("unable to insert");
     //     console.log(result.ops);
-
-
     // });
 
     // db.collection('users').insertMany([
@@ -40,22 +46,21 @@ MongoClient.connect(connectionUL, { useNewUrlParser: true }, (error, client) => 
     //     console.log(result.ops);
     // });
 
-    db.collection('task').insertMany([
-        {
-            description:"Read",
-            completed:false
-        },
-        {
-            description:"Apply",
-            completed:true
-        },
-        {
-            description:"Achive",
-            completed:false
-        }
-    ],(error,result)=>{
-        if(error) return console.error("Error occured");
-        console.log(result.ops);
-        
-    })
+    // db.collection('task').insertMany([
+    //     {
+    //         description:"Read",
+    //         completed:false,
+    //     },
+    //     {
+    //         description:"Apply",
+    //         completed:true
+    //     },
+    //     {
+    //         description:"Achive",
+    //         completed:false
+    //     }
+    // ],(error,result)=>{
+    //     if(error) return console.error("Error occured");
+    //     console.log(result.ops);
+    // })
 });
