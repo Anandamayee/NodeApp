@@ -12,4 +12,8 @@ MongoClient.connect(connectionUL, { useNewUrlParser: true }, (error, client) => 
     }
     const db = client.db(database);
 
+    db.collection('users').deleteOne({ "_id": ObjectId("5f48d950096ba741a0ea00f5") }).then(data => console.log(data)).catch(error => console.error(error));
+    db.collection('users').deleteMany({ "age": 27}).then(data => console.log(data)).catch(error => console.error(error));
+
+
 });
