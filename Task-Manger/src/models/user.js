@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -35,18 +37,31 @@ const userSchema = new mongoose.Schema({
             if (!reg.test(value)) throw new Error('Password must contain at least one uppercase letter, one lowercase letter, one number and one special character: ')
         }
 
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 userSchema.statics.findByCredentials = async (credential) => {
     let user = await User.findOne({ email: credential.email });
-    console.log(user," user");
     if (!user) throw new Error('Please enter a valid credential');
     let isMatch = await bcrypt.compare(credential.password, user.password);
     if (!isMatch) throw new Error('Please enter a valid credential');
     return user;
 }
 
+userSchema.methods.generateToken = async function () {
+    let user = this;
+    let token = jwt.sign({ _id: user._id.toString() }, 'MyIdentity');
+    user.tokens=user.tokens.concat({token});
+    await user.save({ validateModifiedOnly: true });
+    return token;
+
+}
 
 // arrow functions don't binnd this - hence normal function is used
 // next is called when execution is done . if not called then it will keep runnning
